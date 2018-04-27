@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单校验</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        div{
+            width: 600px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: #ccc;
+        }
+        ul li{
+            list-style: none;
+            padding: 10px 0;
+            border-bottom: 1px solid #555;
+
+        }
+        ul li input,ul li select,ul li textarea{
+            margin-left: 10px;
+        }
+        ul li input[type='text']{
+            height: 20px;
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+<form action="">
+    <?php createInput($elements)?>
+</form>
+</body>
+</html>

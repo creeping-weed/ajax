@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax函数封装</title>
+</head>
+<body>
+<script>
+    // 参数：type,url,dataType,data,success,error,
+    var $ =  {
+      ajax : function(options){
+          // 对参数进行处理
+          if(!options || typeof options != 'object'){
+              return false;
+          }
+          var type = options.type === 'post' ? 'post' : 'get';
+          var data = this.object2str(options.data);
+          var url = options.url;
+          if(!url){
+              return false;
+          }
+          if(type==='get'){
+              if(data){
+                  url += '?'+data;
+                  data = null;
+              }
+          }
+          var dataType = options.dataType || 'text';
+          // 发送请求
+          var xhr = new XMLHttpRequest();
+          xhr.open(type,url);
+          if(type === 'post'){
+              xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
+          }
+          xhr.send(data);
+          xhr.onreadystatechange = function(){
+              if(xhr.readyState === 4){
+                  if(xhr.status === 200){
+                      var text;
+                      if(dataType === 'XML'){
+                          text = xhr.responseXML;
+                      }else{
+                          text = dataType === 'json'?JSON.parse(xhr.responseText):xhr.responseText;
+                      }
+                      options.success && options.success(text);
+                  }else{
+                      options.error && options.error();
+                  }
+              }
+          }
+      },
+      object2str: function object2str(obj){
+          var arr = [];
+          for(var k in obj){
+              arr.push(k+'='+obj[k]);
+          }
+          return arr.join('&');
+      }
+    };
+    $.ajax({
+        url: 'demo2.php',
+        type: 'post',
+        data: {
+            name: '小明'
+        },
+        success:function(data){
+            console.log(data);
+        },
+        error:function(){
+            console.log('出错了');
+        }
+    });
+
+</script>
+</body>
+</html>

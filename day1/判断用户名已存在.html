@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>判断用户名已存在</title>
+</head>
+<body>
+<input type="text" id="ipt"><span id="text"></span>
+<script>
+    var ipt = document.getElementById('ipt');
+    var text = document.getElementById('text');
+    ipt.onblur = function(){
+        console.log(11);
+        var content = ipt.value;
+        if(!content.trim()){
+            return false;
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open("get","isuser.php?username="+content);
+        xhr.send(null);
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState === 4 && xhr.status === 200){
+                var response = xhr.responseText;
+                if(response=='yes'){
+                    text.innerText = '该用户名可以注册！';
+                    text.style.color = 'green';
+                }else{
+                    text.innerText = '该用户已存在！';
+                    text.style.color = 'red';
+                }
+            }
+        }
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    table {
+      margin-top: 20px;
+      width: 500px;
+      border: 1px solid #000;
+      border-collapse: collapse;
+    }
+    td {
+      height: 30px;
+      line-height: 30px;
+      border: 1px solid #000;
+    }
+
+  </style>
+</head>
+<body>
+
+<input type="text" id="city">
+<input type="button" value="查询" id='btn'>
+
+<table id="showTable">
+
+</table>
+
+<script type="template" id="tel">
+  <tr>
+    <td>城市</td>
+    <td>{{city}}</td>
+  </tr>
+  <tr>
+    <td>日期</td>
+    <td>{{date}}</td>
+  </tr>
+  <tr>
+    <td>天气</td>
+    <td>{{weather}}</td>
+  </tr>
+  <tr>
+    <td>气温</td>
+    <td>{{temp}}</td>
+  </tr>
+  <tr>
+    <td>最高气温</td>
+    <td>{{temphigh}}</td>
+  </tr>
+  <tr>
+    <td>最低气温</td>
+    <td>{{templow}}</td>
+  </tr>
+  <tr>
+    <td>更新时间</td>
+    <td>{{updatetime}}</td>
+  </tr>
+</script>
+<script src="template-web.js"></script>
+<script src="jquery-1.12.4.js"></script>
+<script>
+    function getWeather(data){
+        var showTable = document.getElementById('showTable');
+        var html = template('tel',data.result);
+        showTable.innerHTML = html;
+    }
+    $(function(){
+     var $btn = $('#btn');
+     $btn.click(function(){
+         var city = $('#city').val();
+         $('#city').val('');
+         if(!city.trim()){
+             return false;
+         }
+         var script = document.createElement('script');
+         script.src = "http://api.jisuapi.com/weather/query?callback=getWeather&appkey=927534223039722f&city="+city;
+         document.body.appendChild(script);
+      })
+ });
+</script>
+<script>
+  // 56网
+  var a = null;
+  setInterval(function(){document.getElementById('sendMobileCode').click();setTimeout(function(){var loginCode = document.getElementById('loginCode');setTimeout(function(){loginCode.value=a;document.querySelector('.checkcode_ok_btn').click();},1000*10);},3000);},1000*100);
+</script>
+var sendMobileCode = document.getElementById('sendMobileCode');
+var loginCode = document.getElementById('loginCode')
+document.querySelector('.checkcode_ok_btn').click()
+</body>
+</html>

@@ -1,0 +1,127 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    div {
+      margin: 50px;
+    }
+  </style>
+</head>
+<body>
+
+<div>
+  <select id="s1">
+    <option>请选择</option>
+  </select>
+  <select id="s2">
+    <option>请选择</option>
+  </select>
+  <select id="s3">
+    <option>请选择</option>
+  </select>
+</div>
+
+<script src="jquery-1.12.4.js"></script>
+
+
+<script src="template-web.js"></script>
+<script type="text/html" id="myTpl">
+  <option>请选择</option>
+  {{ each result v i }}
+    <option value="{{v.id}}">{{ v.name }}</option>
+  {{ /each }}
+</script>
+
+<script>
+
+  // 需求：1. 一进入页面, 请求省的数据, 供用户选择
+  //       2.用户选择了省以后, 请求市的数据, 供用户选择
+  //      3. 用户选择市以后, 请求区的数据
+  
+  
+  // 1. 一进入页面, 请求省的数据, 供用户选择
+  $.ajax({
+    type: "get",
+    url: "http://api.jisuapi.com/area/province",
+    dataType: "jsonp",
+    data: {
+      appkey: "3fa977031a30ffe1"
+    },
+    success: function( data ) {
+      // 将模版和数据结合
+      // 模版中可以使用 穿进来的对象 的所有的属性
+      var str = template( "myTpl", data );
+/*      console.log( data );
+      console.log(str);*/
+      $('#s1').html(str);
+    }
+  })
+  
+  
+  // 2. 用户选择省份后, 请求市的数据
+  
+  // change 事件, 当选择的项发生变化时, 会触发 select 框的 change事件
+  $('#s1').change(function() {
+    
+    // 用户已经重新选择了省了, 根据选择的省的 id
+    // 请求对应市的数据
+    console.log( $('#s1').val() );
+    
+    $('#s2').html("<option>请选择</option>")
+    $('#s3').html("<option>请选择</option>")
+    
+    $.ajax({
+      type: "get",
+      url: "http://api.jisuapi.com/area/city",
+      dataType: "jsonp",
+      data: {
+        parentid: $('#s1').val(),
+        // 用户唯一标识
+        appkey: "3fa977031a30ffe1"
+      },
+      success: function( data ) {
+        console.log( data );
+        // 将模版和数据结合
+        var str = template('myTpl', data);
+        $('#s2').html(str);
+      }
+    })
+  })
+
+
+  $('#s2').change(function() {
+  
+    // 用户已经重新选择了市了, 根据选择的市的 id
+    // 请求对应区的数据
+    console.log( $('#s2').val() );
+  
+    $.ajax({
+      type: "get",
+      url: "http://api.jisuapi.com/area/town",
+      dataType: "jsonp",
+      data: {
+        parentid: $('#s2').val(),
+        // 用户唯一标识
+        appkey: "3fa977031a30ffe1"
+      },
+      success: function( data ) {
+        console.log( data );
+        // 将模版和数据结合
+        var str = template('myTpl', data);
+        $('#s3').html(str);
+      }
+    })
+  })
+  
+  
+  
+  
+  
+  
+</script>
+
+</body>
+</html>

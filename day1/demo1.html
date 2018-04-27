@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax请求</title>
+</head>
+<body>
+<p>111111</p>
+<script>
+    var xhr = new XMLHttpRequest();
+    xhr.open("get","demo1.php?name=小明",true);
+    xhr.send(null);
+    xhr.onreadystatechange = function(){
+        console.log(11);
+    }
+
+</script>
+</body>
+</html>
